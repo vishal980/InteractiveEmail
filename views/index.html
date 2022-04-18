@@ -1,0 +1,120 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Interactive Emailer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <style>
+    body {
+      padding: 0;
+    }
+   .get-data{
+      display: none !important;
+    }
+  .save-template{
+      display: none !important;
+  }
+    /* .container { margin: 150px auto; } */
+    .pt--20{padding-top: 20px;}
+    </style>
+    <body aria-hidden="false">
+      <div class="container">
+        <div class="mt-lg-5 mb-lg-5 bg-info">
+          <h1 class="p-3 text-white">Interactive Emailer</h1>
+        </div>
+        <div class="row">
+        <div id="allData" class="col-md-12">
+        <form id="build-wrap"></form>   
+        </div>
+        </div>
+        <div id="allData1" class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+              <label>Email Id<span class="text-danger">*</span></label>
+                <input type="email" id="txtEmail"  class="form-control" placeholder="Enter Email Id" value="">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+              <label>Subject<span class="text-danger">*</span></label>
+                <input type="email" id="txtSubject"  class="form-control" placeholder="Enter Subject" value="">
+              </div>
+            </div>
+            <div class="col-md-12">
+                <button class="btn-success btn btn-lg" name="button-1649842791666-0-preview" value="Send Email" type="button" id="button-1649842791666-0-preview" onclick="sendEmail();">Send Email</button>
+            </div>
+        </div>
+        <br> 
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="/dist/form-builder.min.js"></script>
+    <script src="/dist/form-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+    jQuery($ => {
+      const fbTemplate = document.getElementById('build-wrap');
+      $(fbTemplate).formBuilder();
+    });
+    function sendEmail(){
+      $("#allData *:not(input)").removeAttr("type");
+         $("#allData *").removeAttr("tooltip");
+         $("#allData *").removeAttr("name");
+         $("#allData *").removeAttr("placeholder");
+         $("#allData *").removeAttr("contenteditable");
+         $("#allData *").removeAttr("contenteditable");
+         $(".required-asterisk").hide();
+         $(".formbuilder-text-label").hide();
+         $(".formbuilder-checkbox-group-label").attr("style","display:none;");
+         $(".formbuilder-select-label").attr("style","display:none;");
+         $(".formbuilder-radio-group-label").attr("style","display:none;");
+         $(".formbuilder-radio-button-group-label").attr("style","display:none;");
+         $(".formbuilder-textarea-label").attr("style","display:none;");
+         $(".formbuilder-date-label").attr("style","display:none;");
+         $(".formbuilder-number-label").attr("style","display:none;");
+         $(".formbuilder-email-label").attr("style","display:none;");
+         
+         $("#allData .form-group").attr("style","width: 100%;clear: left;float: none;");
+         $("#allData  .field-label").attr("style","color: #666;margin-bottom: 5px;line-height: 27px;font-size: 16px;font-weight: normal;");
+        // $("#allData  .form-control").attr("style","height: 34px;display: block;width: 100%;padding: 6px 12px;font-size: 14px;line-height: 1.42857143;border-radius: 4px;")
+         $(".frm-holder").remove(); 
+         $("#allData li").removeAttr("style");
+         $("#allData li").attr("style","list-style:none;border:2px solid #eee;position: relative;padding: 6px;clear: both;margin-left: 0;margin-bottom: 3px;background-color: #fff;");
+         $(".cb-wrap").remove(); 
+        var docdata = $("#allData").html();
+
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+          if(!mailformat.test(txtEmail.value)){ 
+          alert("You have entered an invalid email address!"); 
+          return false;
+          }    
+          if(txtSubject.value === '' || txtSubject.value === undefined || txtSubject.value === null){
+          alert("Pls enter subject"); 
+          return false;
+          }   
+        $.get("http://localhost:8080/index2", function( my_var ) {
+          my_var = my_var.replace('#REPLACECONTENT',docdata);
+          var json = {
+          "email":txtEmail.value,
+          "subject":txtSubject.value,
+          "body":my_var
+        } 
+        console.log(json); 
+        $.post("http://167.172.220.75:3080/api/email",json, function( data,status ) {
+          alert("Mail Sent Successfully");
+          location.reload();
+        }); 
+        });
+        return false;
+       
+    }
+        </script>
+      
+  
+    
+    
+</body>
+</html>

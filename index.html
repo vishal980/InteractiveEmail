@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>jQuery Form Builder Basic Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+    body {
+      padding: 0;
+    }
+    .container { margin: 150px auto; }
+    </style>
+    </head>
+    <body aria-hidden="false">
+      <div class="container">
+        <h1>Interactive Emailer Demo</h1>
+        <div class="row">
+        <div id="allData" class="col-md-12">
+        <form id="build-wrap"></div>   
+        </div>
+        </div>
+        <div id="allData1" class="row">
+            <div class="col-md-12">
+              <label>Email Ids</label>
+                <input type="email" placeholder="Email Id" id="txtEmail" value="">
+            </div>
+            <div class="col-md-12">
+                <button class="btn-success btn" name="button-1649842791666-0-preview" value="Send Email" type="button" id="button-1649842791666-0-preview" onclick="sendEmail();">Send Email</button>
+            </div>
+        </div>
+        <br> 
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="dist/form-builder.min.js"></script>
+    <script src="dist/form-render.min.js"></script>
+    <script>
+    jQuery($ => {
+      const fbTemplate = document.getElementById('build-wrap');
+      $(fbTemplate).formBuilder();
+    });
+    function sendEmail(){
+         $("#allData *").removeAttr("type");
+         $("#allData *").removeAttr("tooltip");
+         $("#allData *").removeAttr("name");
+         $("#allData *").removeAttr("placeholder");
+         $("#allData *").removeAttr("contenteditable");
+         $(".frm-holder").remove(); 
+         $(".cb-wrap").remove(); 
+        var docdata = $("#allData").html();
+        $.get("http://localhost:8080/index2", function( my_var ) {
+          my_var = my_var.replace('#REPLACECONTENT',docdata);
+          var json = {
+          "email":"avadhesh@ariantechsolutions.com",
+          "subject":"AMP EMAIL",
+          "body":my_var
+        }
+        alert("Mail Sent Successfully");
+        console.log(json);
+        });
+       
+    }
+        </script>
+      
+  
+    
+    
+</body>
+</html>
